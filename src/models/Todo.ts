@@ -4,6 +4,6 @@ export class Todo {
   id: string;
   name: string;
   description: string;
-  createdAt: number;
+  createdAt: Date;
   status: TodoStatus;
 }

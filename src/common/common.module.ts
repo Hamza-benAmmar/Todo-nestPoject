@@ -8,5 +8,6 @@ const uuidProvider = {
 @Module({
   providers: [uuidProvider],
   exports: [uuidProvider],
+  controllers: [],
 })
 export class CommonModule {}
