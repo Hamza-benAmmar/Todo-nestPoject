@@ -10,21 +10,16 @@ import {
   Post,
   Put,
   Query,
-  UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { FreezerPipe } from '../pipes/freezer.pipe';
 import { FusionPipe } from '../pipes/fusion.pipe';
-import { v4 as uuidv4, v6 as uuidv6 } from 'uuid';
 import { Todo } from '../models/Todo';
-import { TodoStatus } from '../models/TodoStatus.enum';
 import { AddItemDto } from './dto/addItem.dto';
 import { updateItemDto } from './dto/updateItem.dto';
 import { TodoService } from './todo.service';
-import { DurationExecutionInterceptor } from 'src/interceptors/duration-execution/duration-execution.interceptor';
-import { TodoEntity } from './entities/todo.entity/todo.entity';
 import { SearchDto } from './dto/search.dto';
 
-@UseInterceptors(DurationExecutionInterceptor)
 @Controller('todo')
 export class TodoController {
   constructor(private todoService: TodoService) {}
@@ -73,9 +68,11 @@ export class TodoController {
   AddItem(@Body(FreezerPipe) newTodo: AddItemDto): Todo {
     return this.todoService.AddItem(newTodo);
   }
-  @Post()
-  async AddTodo(@Body() newTodo: AddItemDto) {
-    return await this.todoService.addTodo(newTodo);
+  @Post('add')
+  async AddTodo(@Body() newTodo: AddItemDto, @Req() req: Request) {
+    const userId = req['userId'];
+    console.log(userId);
+    return await this.todoService.addTodo(newTodo, userId);
   }
 
   @Delete('deleteTodo/:id')
@@ -83,20 +80,27 @@ export class TodoController {
     return this.todoService.deleteItem(payload);
   }
   @Delete(':id')
-  async deleteTodo(@Param() payload) {
+  async deleteTodo(@Param() payload, @Req() req: Request) {
     const { id } = payload;
-    return await this.todoService.deleteTodo(id);
+    const userId = req['userId'];
+    return await this.todoService.deleteTodo(id, userId);
   }
   @Delete('/soft/:id')
-  async softDeleteTodo(@Param() payload) {
+  async softDeleteTodo(@Param() payload, @Req() req: Request) {
+    const userId = req['userId'];
     const { id } = payload;
-    return await this.todoService.softdeleteTodo(id);
+    return await this.todoService.softdeleteTodo(id, userId);
   }
 
   @Patch(':id')
-  async UpdateTodo(@Param() payload, @Body() updatedTodo: updateItemDto) {
+  async UpdateTodo(
+    @Param() payload,
+    @Body() updatedTodo: updateItemDto,
+    @Req() req: Request,
+  ) {
     const { id } = payload;
-    return await this.todoService.updateTodo(id, updatedTodo);
+    const userId = req['userId'];
+    return await this.todoService.updateTodo(id, updatedTodo, userId);
   }
 
   @Put('modifyTodo/:id')

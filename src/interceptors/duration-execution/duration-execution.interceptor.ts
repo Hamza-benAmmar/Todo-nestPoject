@@ -12,7 +12,7 @@ export class DurationExecutionInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
 
-    console.log(context.switchToHttp());
+    //console.log(context.switchToHttp());
     const userAgent = request.get('user-agent');
     const { ip, method, path: url } = request;
     const start = Date.now();

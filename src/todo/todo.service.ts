@@ -47,8 +47,13 @@ export class TodoService {
     this.todos.push(todo);
     return todo;
   }
-  async addTodo(newTodo: AddItemDto) {
-    return await this.todoRepository.save(newTodo);
+  async addTodo(newTodo: AddItemDto, userId: string) {
+    const todo = {
+      ...newTodo,
+      userId,
+    };
+    console.log(todo);
+    return await this.todoRepository.save(todo);
   }
   deleteItem(payload) {
     const { id } = payload;
@@ -65,6 +70,7 @@ export class TodoService {
       count: 1,
     };
   }
+
   updateItem(payload, modifiedTodo: updateItemDto) {
     const [todo] = this.getItemById(payload);
     const index = this.todos.findIndex((item) => (item.id = todo.id));
@@ -85,26 +91,42 @@ export class TodoService {
     return todo;
   }
 
-  async updateTodo(id, updatedTodo) {
+  async updateTodo(id, updatedTodo, userId) {
     const todo = await this.todoRepository.findOneBy({ id });
-
     if (!todo) {
       throw new BadRequestException('todo not found');
+    }
+    console.log(userId);
+    console.log(todo.userId);
+    if (todo.userId != userId) {
+      throw new BadRequestException(
+        "no authentification, this todo doesn't belong to you ",
+      );
     }
     return this.todoRepository.update(id, { ...updatedTodo });
   }
 
-  async deleteTodo(id) {
+  async deleteTodo(id, userId) {
     const todo = await this.todoRepository.findOneBy({ id });
     if (!todo) {
       throw new BadRequestException('todo not found');
     }
+    if (todo.userId != userId) {
+      throw new BadRequestException(
+        "no authentification, this todo doesn't belong to you ",
+      );
+    }
     return this.todoRepository.delete(id);
   }
-  async softdeleteTodo(id) {
+  async softdeleteTodo(id, userId) {
     const todo = await this.todoRepository.findOneBy({ id });
     if (!todo) {
       throw new BadRequestException('todo not found');
+    }
+    if (todo.userId != userId) {
+      throw new BadRequestException(
+        "no authentification, this todo doesn't belong to you ",
+      );
     }
     return this.todoRepository.softDelete(id);
   }

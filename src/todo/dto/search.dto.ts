@@ -6,8 +6,8 @@ import {
   IsNotEmpty,
   MaxLength,
 } from 'class-validator';
-import { isInError } from 'src/ErrorHandler/IsInErrorHandling';
-import { TodoStatus } from 'src/models/TodoStatus.enum';
+import { isInError } from '../../ErrorHandler/IsInErrorHandling';
+import { TodoStatus } from '../../models/TodoStatus.enum';
 
 export class SearchDto {
   @IsIn([TodoStatus.actif, TodoStatus.done, TodoStatus.waiting], {

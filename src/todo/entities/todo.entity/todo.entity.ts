@@ -1,5 +1,5 @@
-import { TimeTracabilityEntity } from 'src/generics/timeTracability.entity';
-import { TodoStatus } from 'src/models/TodoStatus.enum';
+import { TimeTracabilityEntity } from '../../../generics/timeTracability.entity';
+import { TodoStatus } from '../../../models/TodoStatus.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('todo')
@@ -16,4 +16,6 @@ export class TodoEntity extends TimeTracabilityEntity {
     default: TodoStatus.waiting,
   })
   status: TodoStatus;
+  @Column()
+  userId: string;
 }
