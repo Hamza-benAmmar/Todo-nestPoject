@@ -1,7 +1,6 @@
-import { Optional } from '@nestjs/common';
-import { User } from '@ngneat/falso';
 import { IsNotEmpty } from 'class-validator';
 import { Skill } from 'src/skill/entities/skill.entity';
+import { User } from 'src/user/entities/user.entity';
 
 export class CreateCvDto {
   @IsNotEmpty()

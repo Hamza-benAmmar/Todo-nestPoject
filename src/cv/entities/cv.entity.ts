@@ -33,7 +33,8 @@ export class Cv {
   path: string;
 
   @ManyToMany(() => Skill, (skill) => skill.cvs, {
-    cascade: ['insert'],
+    cascade: ['insert', 'remove', 'update'],
+    eager: true,
   })
   @JoinTable({
     name: 'cv_skills',
@@ -48,6 +49,9 @@ export class Cv {
   })
   skills: Skill[];
 
-  @ManyToOne(() => User, (user) => user.cvs)
+  @ManyToOne(() => User, (user) => user.cvs, {
+    cascade: ['insert', 'remove', 'update'],
+    eager: true,
+  })
   user: User;
 }

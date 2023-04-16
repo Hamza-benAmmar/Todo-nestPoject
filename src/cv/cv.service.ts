@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCvDto } from './dto/create-cv.dto';
 import { UpdateCvDto } from './dto/update-cv.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -84,11 +88,27 @@ export class CvService {
     return this.cvRepository.findOneBy({ id });
   }
 
-  update(id: number, updateCvDto: UpdateCvDto) {
-    return `This action updates a #${id} cv`;
+  async update(id: string, updateCvDto: UpdateCvDto) {
+    const cv = await this.cvRepository.findOne({ where: { id } });
+    if (!cv) {
+      throw new NotFoundException('todo not found');
+    } else {
+      await this.cvRepository.update({ id }, updateCvDto);
+      return {
+        message: 'updated successfully',
+        cv,
+      };
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cv`;
+  async remove(id: string) {
+    const cv = await this.cvRepository.findOne({ where: { id } });
+    if (!cv) {
+      throw new NotFoundException('todo not found');
+    }
+    await this.cvRepository.delete(id);
+    return {
+      message: 'cv removed successfully',
+    };
   }
 }
