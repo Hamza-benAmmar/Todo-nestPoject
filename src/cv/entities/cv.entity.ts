@@ -32,7 +32,9 @@ export class Cv {
   @Column()
   path: string;
 
-  @ManyToMany(() => Skill, (skill) => skill.cvs)
+  @ManyToMany(() => Skill, (skill) => skill.cvs, {
+    cascade: ['insert'],
+  })
   @JoinTable({
     name: 'cv_skills',
     joinColumn: {

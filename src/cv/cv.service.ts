@@ -48,7 +48,7 @@ export class CvService {
   }
   async create(createCvDto: CreateCvDto) {
     //est ce que lezemni naamil kol mara create Skill / user ken mehouch mawjoud aandi ?
-    const { user, skills } = createCvDto;
+    /*const { user, skills } = createCvDto;
     const { id } = user;
     if (user) {
       if (!id) {
@@ -72,7 +72,7 @@ export class CvService {
         }
         this.skillRepository.save(skill);
       }
-    }
+    }*/
     return await this.cvRepository.save(createCvDto);
   }
 

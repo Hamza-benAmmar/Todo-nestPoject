@@ -30,6 +30,7 @@ import { User } from './user/entities/user.entity';
       database: 'todolist',
       entities: [TodoEntity, Cv, User, Skill],
       synchronize: true,
+      logging: true,
     }),
     TodoModule,
     JwtModule.register({
