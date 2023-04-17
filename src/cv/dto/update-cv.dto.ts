@@ -1,8 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateCvDto } from './create-cv.dto';
 import { Optional } from '@nestjs/common';
-import { Skill } from 'src/skill/entities/skill.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Skill } from '../../skill/entities/skill.entity';
+import { User } from '../../user/entities/user.entity';
 
 export class UpdateCvDto extends PartialType(CreateCvDto) {
   @Optional()

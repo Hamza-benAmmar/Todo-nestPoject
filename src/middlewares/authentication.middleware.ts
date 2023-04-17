@@ -6,10 +6,11 @@ import * as jwt from 'jsonwebtoken';
 export class AuthMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const auth = req.headers['auth-user'];
+    console.log(auth);
     if (!auth) {
       return res.json({
         status: 401,
-        message: 'no auth',
+        message: 'no authorization',
       });
     }
     try {
@@ -21,7 +22,7 @@ export class AuthMiddleware implements NestMiddleware {
     } catch (error) {
       return res.json({
         status: 401,
-        message: 'no auth',
+        message: 'no authorization',
       });
     }
   }

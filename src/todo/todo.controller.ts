@@ -11,6 +11,7 @@ import {
   Put,
   Query,
   Req,
+  Version,
 } from '@nestjs/common';
 import { FreezerPipe } from '../pipes/freezer.pipe';
 import { FusionPipe } from '../pipes/fusion.pipe';
@@ -19,6 +20,7 @@ import { AddItemDto } from './dto/addItem.dto';
 import { updateItemDto } from './dto/updateItem.dto';
 import { TodoService } from './todo.service';
 import { SearchDto } from './dto/search.dto';
+import { version } from 'os';
 
 @Controller('todo')
 export class TodoController {
@@ -46,31 +48,37 @@ export class TodoController {
   numberTodosPerStatus() {
     return this.todoService.numberTodosPerStatus();
   }
-
-  @Get('getAll')
-  getItems(): Todo[] {
-    return this.todoService.getItems();
-  }
-  @Get('getTodo/:id')
+  @Get(':id')
+  @Version('1')
   getItemById(@Param() payload): Todo[] {
     return this.todoService.getItemById(payload);
   }
   @Get(':id')
+  @Version('2')
   async getTodoById(@Param() payload) {
     const { id } = payload;
     return await this.todoService.getTodoById(id);
   }
   @Get()
+  @Version('1')
+  getItems(): Todo[] {
+    return this.todoService.getItems();
+  }
+  @Get()
+  @Version('2')
   getTodos() {
     return this.todoService.getTodos();
   }
-  @Post('AddTodo')
+  @Post('add')
+  @Version('1')
   AddItem(@Body(FreezerPipe) newTodo: AddItemDto): Todo {
     return this.todoService.AddItem(newTodo);
   }
   @Post('add')
+  @Version('2')
   async AddTodo(@Body() newTodo: AddItemDto, @Req() req: Request) {
     const userId = req['userId'];
+    console.log(req);
     console.log(userId);
     return await this.todoService.addTodo(newTodo, userId);
   }
