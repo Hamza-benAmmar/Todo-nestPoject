@@ -70,12 +70,10 @@ export class TodoController {
     return this.todoService.getTodos();
   }
   @Post('add')
-  @Version('1')
   AddItem(@Body(FreezerPipe) newTodo: AddItemDto): Todo {
     return this.todoService.AddItem(newTodo);
   }
   @Post('add')
-  @Version('2')
   async AddTodo(@Body() newTodo: AddItemDto, @Req() req: Request) {
     const userId = req['userId'];
     console.log(req);
